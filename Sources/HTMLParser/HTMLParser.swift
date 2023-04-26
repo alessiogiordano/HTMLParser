@@ -77,7 +77,9 @@ public class HTMLParser: NSObject {
         return _parse()
     }
     /// Stops the parser object.
-    open func abortParsing() {}
+    open func abortParsing() {
+        _active = false
+    }
     /// An NSError object from which you can obtain information about a parsing error.
     open var parserError: Error?
     
