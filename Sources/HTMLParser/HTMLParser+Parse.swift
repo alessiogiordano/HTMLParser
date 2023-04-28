@@ -50,22 +50,16 @@ extension HTMLParser {
     internal func _parse() -> Bool {
         self._active = true
         
-        var state: ParserState = .lookingForCharacters
-        var iterator: String.Index? = self._contents.startIndex
-        /*let regressIterator: () -> Character? = {
-            guard let index = iterator else { return nil }
-            if index != self._contents.startIndex {
-                iterator = self._contents.distance(from: self._contents.startIndex, to: index) > 1
-                    ? self._contents.index(after: index) : self._contents.startIndex
-            }
-            return self._contents[iterator!]
-        }*/
+        let startIndex = self._contents.startIndex
+        let endIndex = self._contents.index(before: self._contents.endIndex)
+        var iterator: String.Index? = startIndex
         let advanceIterator: () -> Character? = {
             guard let index = iterator else { return nil }
-            iterator = self._contents.distance(from: index, to: self._contents.endIndex) > 1
-                ? self._contents.index(after: index) : nil
+            iterator = self._contents.index(index, offsetBy: 1, limitedBy: endIndex)
             return iterator != nil ? self._contents[iterator!] : nil
         }
+        
+        var state: ParserState = .lookingForCharacters
         var pending: String = ""
         var ignorableWhitespace: String = ""
         
