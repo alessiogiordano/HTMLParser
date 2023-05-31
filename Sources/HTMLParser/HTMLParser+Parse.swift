@@ -27,11 +27,18 @@ extension HTMLParser {
             self.init(name, [:])
         }
         init(_ name: String, _ attributes: [String: String]) {
+            /// Tag names are case insensitive
             self.name = name.uppercased()
-            self.attributes = attributes
+            /// Attribute names are case insensitive
+            self.attributes = attributes.reduce(into: .init()) { result, attribute in
+                result[attribute.key.lowercased()] = attribute.value
+            }
         }
         func appending(attributes: [String: String]) -> Tag {
-            return Tag(self.name, self.attributes.merging(attributes, uniquingKeysWith: { return $1 }))
+            /// Attribute names are case insensitive and lowercased
+            return Tag(self.name, self.attributes.merging(attributes.reduce(into: .init()) { result, attribute in
+                result[attribute.key.lowercased()] = attribute.value
+            }, uniquingKeysWith: { return $1 }))
         }
         func dispatchDidStartElement(_ parser: HTMLParser, on delegate: HTMLParserDelegate?) {
             delegate?.parser(parser, didStartElement: self.name, namespaceURI: nil, qualifiedName: nil, attributes: attributes)
