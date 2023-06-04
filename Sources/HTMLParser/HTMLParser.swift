@@ -321,7 +321,7 @@ public class HTMLParser: NSObject {
         get { nil }
         set {}
     }
-    var externalEntityResolvingPolicy: XMLParser.ExternalEntityResolvingPolicy {
+    var externalEntityResolvingPolicy: ExternalEntityResolvingPolicy {
         get { .never }
         set {}
     }
