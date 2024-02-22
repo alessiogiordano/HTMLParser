@@ -57,6 +57,15 @@ extension HTMLParser {
     internal func _parse() -> Bool {
         self._active = true
         
+        if self._contents.isEmpty {
+            // MARK: parserDidStartDocument Event
+            delegate?.parserDidStartDocument(self)
+            // MARK: parserDidEndDocument Event
+            delegate?.parserDidEndDocument(self)
+            self._active = false
+            return true
+        }
+        
         let startIndex = self._contents.startIndex
         let endIndex = self._contents.index(before: self._contents.endIndex)
         var iterator: String.Index? = startIndex
@@ -327,7 +336,7 @@ extension HTMLParser {
             }
         }
         
-        // MARK: parserDidStartDocument Event
+        // MARK: parserDidEndDocument Event
         delegate?.parserDidEndDocument(self)
         self._active = false
         return true
